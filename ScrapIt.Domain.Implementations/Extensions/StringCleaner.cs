@@ -9,9 +9,19 @@ namespace ScrapIt.Domain.Implementations.Extensions
     {
         private static Regex notNumberRgx = new Regex(@"\D*");
 
-        public static string PriceClean(this string dirtyStr)
+        public static int? PriceClean(this string dirtyStr)
         {
-            return notNumberRgx.Replace(dirtyStr, "");
+            var cleanStr = notNumberRgx.Replace(dirtyStr, "");
+
+            int price;
+            if (int.TryParse(cleanStr, out price))
+            {
+                return price;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static string NewLineDelete(this string dirtyStr)

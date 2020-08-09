@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScrapIt.Web</name>
+    </assembly>
+    <members>
+        <member name="T:ScrapIt.Web.Controllers.TaskScrapperController">
+            <summary>
+            REST API tasks for Avito
+            </summary>
+        </member>
+        <member name="M:ScrapIt.Web.Controllers.TaskScrapperController.GetAll">
+            <summary>
+            Get all tasks
+            </summary>
+            <param name="taskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ScrapIt.Web.Controllers.TaskScrapperController.GetById(System.Int64)">
+            <summary>
+            Get all tasks by id
+            </summary>
+            <param name="taskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ScrapIt.Web.Controllers.TaskScrapperController.Create(ScrapIt.Domain.Contracts.Models.TaskCreateDto)">
+            <summary>
+            Create new task for Avito
+            </summary>
+            <param name="taskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ScrapIt.Web.Controllers.TaskScrapperController.Delete(ScrapIt.Domain.Contracts.Models.TaskDto)">
+            <summary>
+            Delete task
+            </summary>
+            <param name="taskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ScrapIt.Web.Controllers.TaskScrapperController.Update(ScrapIt.Domain.Contracts.Models.TaskDto)">
+            <summary>
+            Update task
+            </summary>
+            <param name="taskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ScrapIt.Web.Controllers.WebScraperController">
+            <summary>
+            REST API for scrapping Avito
+            </summary>
+        </member>
+        <member name="M:ScrapIt.Web.Controllers.WebScraperController.Get">
+            <summary>
+            Get information from web page in Avito
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

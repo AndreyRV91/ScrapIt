@@ -8,6 +8,9 @@ using ScrapIt.Domain.Contracts.Models;
 
 namespace ScrapIt.Web.Controllers
 {
+    /// <summary>
+    /// REST API for scrapping Avito
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class WebScraperController : ControllerBase
@@ -21,10 +24,14 @@ namespace ScrapIt.Web.Controllers
             _webScraperService = webScraperService;
         }
 
+        /// <summary>
+        /// Get information from web page in Avito
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            List<CarModel> carModelList;
+            List<CarCreateDto> carModelList;
 
             try
             {

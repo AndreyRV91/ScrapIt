@@ -6,6 +6,6 @@ namespace ScrapIt.Domain.Contracts
 {
     public interface IWebScraperService
     {
-        Task<List<CarModel>> GetPageDetails(string url);
+        Task<List<CarCreateDto>> GetPageDetails(string url);
     }
 }

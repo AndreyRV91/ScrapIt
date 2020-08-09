@@ -2,6 +2,7 @@
 using AngleSharp.Dom;
 using AngleSharp.XPath;
 using Microsoft.Extensions.Logging;
+using ScrapIt.DAL.Contracts;
 using ScrapIt.Domain.Contracts;
 using ScrapIt.Domain.Contracts.Models;
 using ScrapIt.Domain.Implementations.Extensions;
@@ -17,19 +18,22 @@ namespace ScrapIt.Domain.Implementations.Services
         private readonly IConfiguration _config;
         private readonly IBrowsingContext _browsingContext;
         private readonly ILogger _logger;
+        private readonly IDbRepository _dbRepository;
 
-        public WebScrapperService(ILogger<IWebScraperService> logger)
+        public WebScrapperService(ILogger<IWebScraperService> logger, IDbRepository dbRepository)
         {
             _config = Configuration.Default.WithDefaultLoader().WithXPath();
             _browsingContext = BrowsingContext.New(_config);
 
             _logger = logger;
+
+            _dbRepository = dbRepository;
         }
 
-        public async Task<List<CarModel>> GetPageDetails(string url)
+        public async Task<List<CarCreateDto>> GetPageDetails(string url)
         {
             var document = await GetDocument(url);
-            var elementList = new List<CarModel>();
+            var elementList = new List<CarCreateDto>();
 
             try
             {
@@ -37,16 +41,15 @@ namespace ScrapIt.Domain.Implementations.Services
                 var descriptions = document.Body.SelectNodes("//div[@data-marker='item-specific-params']");
                 var prices = document.Body.SelectNodes("//span[contains(@class,'snippet-price')]");
                 var publishDates = document.QuerySelectorAll(".snippet-date-info").Select(m => m.GetAttribute("data-tooltip")).ToArray();
-                var links = document.QuerySelectorAll(".snippet-link").Select(m => m.GetAttribute("href")).ToArray();
+                var urls = document.QuerySelectorAll(".snippet-link").Select(m => m.GetAttribute("href")).ToArray();
 
                 for (int i = 0; i < 5; i++)
                 {
-
-                    elementList.Add(new CarModel { Name = names.Any()? names[i].Text().NewLineDelete() : default,
+                    elementList.Add(new CarCreateDto { Name = names.Any()? names[i].Text().NewLineDelete() : default,
                                                    Description = descriptions.Any()? descriptions[i].Text().NewLineDelete(): default, 
-                                                   Price = prices.Any()? Int32.Parse(prices[i].Text().PriceClean()) : default, 
-                                                   PublishDate = publishDates.Any()? publishDates[i]: default,
-                                                   Link = links.Any()? links[i] : default
+                                                   Price = prices.Any()? prices[i].Text().PriceClean(): default,
+                                                   PublishDate = publishDates.Any()? publishDates[i].ConvertToYYYMMDD() : default,
+                                                   Url = urls.Any()? urls[i] : default
 
                     });
                 }
