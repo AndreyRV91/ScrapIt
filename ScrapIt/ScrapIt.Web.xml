@@ -49,10 +49,17 @@
             REST API for scrapping Avito
             </summary>
         </member>
-        <member name="M:ScrapIt.Web.Controllers.WebScraperController.Get">
+        <member name="M:ScrapIt.Web.Controllers.WebScraperController.Create(System.Int64,System.String)">
             <summary>
             Get information from web page in Avito
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ScrapIt.Web.Controllers.WebScraperController.Get(System.Int32)">
+            <summary>
+            Get all cars of task
+            </summary>
+            <param name="taskModel"></param>
             <returns></returns>
         </member>
     </members>

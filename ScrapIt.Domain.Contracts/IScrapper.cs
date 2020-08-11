@@ -4,10 +4,8 @@ using System.Threading.Tasks;
 
 namespace ScrapIt.Domain.Contracts
 {
-    public interface IWebScraperService
+    public interface IScrapper
     {
-        Task<List<CarDto>> Get(int taskId);
-
-        Task Create(long taskId, string url);
+        Task<List<CarDto>> GetPageDetails(long taksId, string url);
     }
 }

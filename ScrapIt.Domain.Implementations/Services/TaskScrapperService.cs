@@ -28,9 +28,9 @@ namespace ScrapIt.Domain.Implementations.Services
         {
             var results = (await _dbRepository.GetAll<TaskEntity>()).ToList();
 
-            var taskGetDto = _mapper.Map<List<TaskEntity>, List<TaskDto>>(results);
+            var taskDto = _mapper.Map<List<TaskEntity>, List<TaskDto>>(results);
 
-            return taskGetDto;
+            return taskDto;
         }
 
         public async Task<TaskDto> GetById(long id)

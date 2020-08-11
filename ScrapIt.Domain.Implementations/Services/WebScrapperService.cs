@@ -1,8 +1,10 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
 using AngleSharp.XPath;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using ScrapIt.DAL.Contracts;
+using ScrapIt.DAL.Contracts.Entities;
 using ScrapIt.Domain.Contracts;
 using ScrapIt.Domain.Contracts.Models;
 using ScrapIt.Domain.Implementations.Extensions;
@@ -15,56 +17,38 @@ namespace ScrapIt.Domain.Implementations.Services
 {
     public class WebScrapperService : IWebScraperService
     {
-        private readonly IConfiguration _config;
-        private readonly IBrowsingContext _browsingContext;
-        private readonly ILogger _logger;
+        private readonly ILogger<WebScrapperService> _logger;
+        private readonly IMapper _mapper;
         private readonly IDbRepository _dbRepository;
+        private readonly IScrapper _scrapper;
 
-        public WebScrapperService(ILogger<IWebScraperService> logger, IDbRepository dbRepository)
+        public WebScrapperService(ILogger<WebScrapperService> logger, IMapper mapper, IDbRepository dbRepository, IScrapper scrapper)
         {
-            _config = Configuration.Default.WithDefaultLoader().WithXPath();
-            _browsingContext = BrowsingContext.New(_config);
-
             _logger = logger;
 
+            _mapper = mapper;
             _dbRepository = dbRepository;
+            _scrapper = scrapper;
         }
 
-        public async Task<List<CarCreateDto>> GetPageDetails(string url)
+        public async Task<List<CarDto>> Get(int taskId)
         {
-            var document = await GetDocument(url);
-            var elementList = new List<CarCreateDto>();
+            var results = (await _dbRepository.Get<CarEntity>(c => c.TaskId == taskId)).ToList();
 
-            try
-            {
-                var names = document.Body.SelectNodes("//div[@class='item__line']//span[contains(@itemprop,'name')]");
-                var descriptions = document.Body.SelectNodes("//div[@data-marker='item-specific-params']");
-                var prices = document.Body.SelectNodes("//span[contains(@class,'snippet-price')]");
-                var publishDates = document.QuerySelectorAll(".snippet-date-info").Select(m => m.GetAttribute("data-tooltip")).ToArray();
-                var urls = document.QuerySelectorAll(".snippet-link").Select(m => m.GetAttribute("href")).ToArray();
+            var taskDto = _mapper.Map<List<CarEntity>, List<CarDto>>(results);
 
-                for (int i = 0; i < 5; i++)
-                {
-                    elementList.Add(new CarCreateDto { Name = names.Any()? names[i].Text().NewLineDelete() : default,
-                                                   Description = descriptions.Any()? descriptions[i].Text().NewLineDelete(): default, 
-                                                   Price = prices.Any()? prices[i].Text().PriceClean(): default,
-                                                   PublishDate = publishDates.Any()? publishDates[i].ConvertToYYYMMDD() : default,
-                                                   Url = urls.Any()? urls[i] : default
-
-                    });
-                }
-            }
-            catch(Exception e)
-            {
-                _logger.LogDebug(1, e.ToString());
-            }
-
-            return elementList;
+            return taskDto;
         }
 
-        private async Task<IDocument> GetDocument(string url)
+        public async Task Create(long taskId, string url)
         {
-            return await _browsingContext.OpenAsync(url);
+            List<CarDto> carDtoList;
+
+            carDtoList = await _scrapper.GetPageDetails(taskId, url);
+            var entities = _mapper.Map<List<CarDto>, List<CarEntity>>(carDtoList);
+
+            await _dbRepository.AddRange(entities);
+            await _dbRepository.SaveChangesAsync();
         }
     }
 }

@@ -17,8 +17,8 @@ namespace ScrapIt.Web.Profiles
             CreateMap<TaskDto, TaskEntity>();
             CreateMap<TaskEntity, TaskDto>();
 
-            CreateMap<CarCreateDto, CarEntity>();
-            CreateMap<CarEntity, CarCreateDto >();
+            CreateMap<CarDto, CarEntity>();
+            CreateMap<CarEntity, CarDto >();
         }
     }
 }

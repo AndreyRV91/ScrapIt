@@ -28,15 +28,12 @@ namespace ScrapIt.Web.Controllers
         /// Get information from web page in Avito
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpPost]
+        public async Task<IActionResult> Create(long taskId, string url)
         {
-            List<CarCreateDto> carModelList;
-
             try
             {
-                carModelList = await _webScraperService.GetPageDetails(@"https://www.avito.ru/moskva/avtomobili/haval-ASgBAgICAUTgtg2umCg?radius=200&p=1");
-
+                await _webScraperService.Create(taskId, url);
             }
             catch (Exception ex)
             {
@@ -44,7 +41,20 @@ namespace ScrapIt.Web.Controllers
                 return NotFound();
             }         
             
-            return Ok(carModelList);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Get all cars of task
+        /// </summary>
+        /// <param name="taskModel"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Get(int taskId)
+        {
+            var tasks = await _webScraperService.Get(taskId);
+
+            return Ok(tasks);
         }
     }
 }
