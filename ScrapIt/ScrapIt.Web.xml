@@ -44,18 +44,18 @@
             <param name="taskModel"></param>
             <returns></returns>
         </member>
-        <member name="T:ScrapIt.Web.Controllers.WebScraperController">
+        <member name="T:ScrapIt.Web.Controllers.WebScrapperController">
             <summary>
             REST API for scrapping Avito
             </summary>
         </member>
-        <member name="M:ScrapIt.Web.Controllers.WebScraperController.Create(System.Int64,System.String)">
+        <member name="M:ScrapIt.Web.Controllers.WebScrapperController.Create(System.Int64,System.String,System.Int32)">
             <summary>
             Get information from web page in Avito
             </summary>
             <returns></returns>
         </member>
-        <member name="M:ScrapIt.Web.Controllers.WebScraperController.Get(System.Int32)">
+        <member name="M:ScrapIt.Web.Controllers.WebScrapperController.Get(System.Int32)">
             <summary>
             Get all cars of task
             </summary>

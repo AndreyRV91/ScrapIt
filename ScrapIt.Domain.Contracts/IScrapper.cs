@@ -6,6 +6,6 @@ namespace ScrapIt.Domain.Contracts
 {
     public interface IScrapper
     {
-        Task<List<CarDto>> GetPageDetails(long taksId, string url);
+        Task<List<CarDto>> GetPageDetails(long taksId, string url, int pagesCountToScrap);
     }
 }

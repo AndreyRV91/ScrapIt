@@ -26,45 +26,51 @@ namespace ScrapIt.Domain.Implementations
             _logger = logger;
         }
 
-        public async Task<List<CarDto>> GetPageDetails(long taskId, string url)
+        public async Task<List<CarDto>> GetPageDetails(long taskId, string url, int pagesCountToScrap)
         {
-            var document = await GetDocument(String.Format(url, 1));
             var elementList = new List<CarDto>();
 
-            try
+            await foreach (var document in GetDocument(url, pagesCountToScrap))
             {
-                var names = document.Body.SelectNodes("//div[@class='item__line']//span[contains(@itemprop,'name')]");
-                var descriptions = document.Body.SelectNodes("//div[@data-marker='item-specific-params']");
-                var prices = document.Body.SelectNodes("//span[contains(@class,'snippet-price')]");
-                var publishDates = document.QuerySelectorAll(".snippet-date-info").Select(m => m.GetAttribute("data-tooltip")).ToArray();
-                var urls = document.QuerySelectorAll(".snippet-link").Select(m => m.GetAttribute("href")).ToArray();
-
-                for (int i = 0; i < 10; i++)
+                try
                 {
-                    elementList.Add(new CarDto
-                    {
-                        Name = names.Any() ? names[i].Text().NewLineDelete() : default,
-                        TaskId = taskId,
-                        Description = descriptions.Any() ? descriptions[i].Text().NewLineDelete() : default,
-                        Price = prices.Any() ? prices[i].Text().PriceClean() : default,
-                        PublishDate = publishDates.Any() ? publishDates[i].ConvertToYYYMMDD() : default,
-                        Url = urls.Any() ? urls[i] : default
+                    var names = document.Body.SelectNodes("//div[@class='item__line']//span[contains(@itemprop,'name')]");
+                    var descriptions = document.Body.SelectNodes("//div[@data-marker='item-specific-params']");
+                    var prices = document.Body.SelectNodes("//span[contains(@class,'snippet-price')]");
+                    var publishDates = document.QuerySelectorAll(".snippet-date-info").Select(m => m.GetAttribute("data-tooltip")).ToArray();
+                    var urls = document.QuerySelectorAll(".snippet-link").Select(m => m.GetAttribute("href")).ToArray();
 
-                    });
+                    for (int i = 0; i < 10; i++)
+                    {
+                        elementList.Add(new CarDto
+                        {
+                            Name = names.Any() ? names[i].Text().NewLineDelete() : default,
+                            TaskId = taskId,
+                            Description = descriptions.Any() ? descriptions[i].Text().NewLineDelete() : default,
+                            Price = prices.Any() ? prices[i].Text().PriceClean() : default,
+                            PublishDate = publishDates.Any() ? publishDates[i].ConvertToYYYMMDD() : default,
+                            Url = urls.Any() ? urls[i] : default
+                        });
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                _logger.LogDebug(1, e.ToString());
-                throw;
+                catch (Exception e)
+                {
+                    _logger.LogDebug(1, e.ToString());
+                    throw;
+                }
             }
 
             return elementList;
         }
 
-        private async Task<IDocument> GetDocument(string url)
+        private async IAsyncEnumerable<IDocument> GetDocument(string url, int pagesCountToScrap)
         {
-            return await _browsingContext.OpenAsync(url);
+            for (int i = 0; i < pagesCountToScrap; i++)
+            {
+                Random rnd = new Random();
+                await Task.Delay(rnd.Next(100, 200));
+                yield return await _browsingContext.OpenAsync(String.Format(url, i));
+            }
         }
     }
 }

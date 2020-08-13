@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ScrapIt.Domain.Implementations.Services
 {
-    public class WebScrapperService : IWebScraperService
+    public class WebScrapperService : IWebScrapperService
     {
         private readonly ILogger<WebScrapperService> _logger;
         private readonly IMapper _mapper;
@@ -40,11 +40,11 @@ namespace ScrapIt.Domain.Implementations.Services
             return taskDto;
         }
 
-        public async Task Create(long taskId, string url)
+        public async Task Create(long taskId, string url, int pagesCountToScrap)
         {
             List<CarDto> carDtoList;
 
-            carDtoList = await _scrapper.GetPageDetails(taskId, url);
+            carDtoList = await _scrapper.GetPageDetails(taskId, url, pagesCountToScrap);
             var entities = _mapper.Map<List<CarDto>, List<CarEntity>>(carDtoList);
 
             await _dbRepository.AddRange(entities);

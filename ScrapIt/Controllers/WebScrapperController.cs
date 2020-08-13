@@ -13,12 +13,12 @@ namespace ScrapIt.Web.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    public class WebScraperController : ControllerBase
+    public class WebScrapperController : ControllerBase
     {
-        private readonly ILogger<WebScraperController> _logger;
-        private readonly IWebScraperService _webScraperService;
+        private readonly ILogger<WebScrapperController> _logger;
+        private readonly IWebScrapperService _webScraperService;
 
-        public WebScraperController(ILogger<WebScraperController> logger, IWebScraperService webScraperService)
+        public WebScrapperController(ILogger<WebScrapperController> logger, IWebScrapperService webScraperService)
         {
             _logger = logger;
             _webScraperService = webScraperService;
@@ -29,11 +29,11 @@ namespace ScrapIt.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Create(long taskId, string url)
+        public async Task<IActionResult> Create(long taskId, string url, int pagesCountToScrap)
         {
             try
             {
-                await _webScraperService.Create(taskId, url);
+                await _webScraperService.Create(taskId, url, pagesCountToScrap);
             }
             catch (Exception ex)
             {

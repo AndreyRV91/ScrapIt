@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using NLog.Extensions.Logging;
 using ScrapIt.DAL.Contracts;
 using ScrapIt.DAL.Implementations;
 using ScrapIt.Domain.Contracts;
@@ -45,7 +43,7 @@ namespace ScrapIt
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddTransient<IWebScraperService, WebScrapperService>();
+            services.AddTransient<IWebScrapperService, WebScrapperService>();
             services.AddTransient<ITaskScrapperService, TaskScrapperService>();
             services.AddTransient<IScrapper, Scrapper>();
             services.AddTransient<IDbRepository, DbRepository>();
