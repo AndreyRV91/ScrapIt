@@ -7,11 +7,11 @@ namespace ScrapIt.Domain.Implementations.Extensions
 {
     static class StringCleaner
     {
-        private static Regex notNumberRgx = new Regex(@"\D*");
+        private static Regex NumberRgx = new Regex(@"\d*");
 
         public static int? PriceClean(this string dirtyStr)
         {
-            var cleanStr = notNumberRgx.Replace(dirtyStr, "");
+            var cleanStr = NumberRgx.Match(dirtyStr).Value;
 
             int price;
             if (int.TryParse(cleanStr, out price))

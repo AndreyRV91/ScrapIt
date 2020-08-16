@@ -35,7 +35,7 @@ namespace ScrapIt.Domain.Implementations
                 try
                 {
                     var names = document.Body.SelectNodes("//div[@class='item__line']//span[contains(@itemprop,'name')]");
-                    var descriptions = document.Body.SelectNodes("//div[@data-marker='item-specific-params']");
+                    var descriptions = document.Body.SelectNodes("//div[contains(@class,'specific-params specific-params_block')]");
                     var prices = document.Body.SelectNodes("//span[contains(@class,'snippet-price')]");
                     var publishDates = document.QuerySelectorAll(".snippet-date-info").Select(m => m.GetAttribute("data-tooltip")).ToArray();
                     var urls = document.QuerySelectorAll(".snippet-link").Select(m => m.GetAttribute("href")).ToArray();

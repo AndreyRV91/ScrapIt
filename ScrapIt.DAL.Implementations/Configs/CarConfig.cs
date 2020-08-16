@@ -13,12 +13,12 @@ namespace ScrapIt.DAL.Implementations.Configs
             builder.Property(p => p.Name)
                 .HasColumnName("Name")
                 .HasMaxLength(255)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .IsRequired();
 
             builder.Property(p => p.Description)
                 .HasColumnName("Description")
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .IsRequired(false);
 
             builder.Property(p => p.Price)
@@ -31,7 +31,7 @@ namespace ScrapIt.DAL.Implementations.Configs
 
             builder.Property(p => p.Url)
                 .HasColumnName("Url")
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .IsRequired(true);
 
             builder.HasOne(s => s.TaskEntity)

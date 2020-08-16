@@ -12,13 +12,13 @@ namespace ScrapIt.DAL.Implementations.Configs
 
             builder.Property(p => p.Url)
                 .HasColumnName("Url")
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .IsRequired(true);
 
             builder.Property(p => p.Name)
                 .HasColumnName("Name")
                 .HasMaxLength(255)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .IsRequired();
 
         }

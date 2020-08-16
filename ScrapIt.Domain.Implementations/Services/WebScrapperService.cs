@@ -7,8 +7,6 @@ using ScrapIt.DAL.Contracts;
 using ScrapIt.DAL.Contracts.Entities;
 using ScrapIt.Domain.Contracts;
 using ScrapIt.Domain.Contracts.Models;
-using ScrapIt.Domain.Implementations.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

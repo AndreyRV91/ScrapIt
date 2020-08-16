@@ -1,8 +1,4 @@
-﻿using AngleSharp;
-using AngleSharp.Dom;
-using AngleSharp.XPath;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
 using ScrapIt.DAL.Contracts;
 using ScrapIt.DAL.Contracts.Entities;
 using ScrapIt.Domain.Contracts;
